@@ -56,15 +56,6 @@ app.use('/recursos', express.static(__dirname + '/public'));
 //app.use(cookieParser("secretoelcode"))
 
 app.use('', routes)
-/* app.use('/api/users', userRouter); //localhost:8080/api/users
-app.use('/api/products', productsRouter);
-app.use('/api/carts', cartsRouter);
-app.use('/api/messages', messageRouter)
-app.use('/api/mockingproducts', mockingproductsRouter)
-app.use('/api/errors', errorsRouter)
-app.use('/logger', loggerRouter) */
-
-
 
 initPassport();
 app.use(passport.initialize());
