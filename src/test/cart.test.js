@@ -2,12 +2,11 @@ const chai = require('chai');
 const supertest = require('supertest');
 const assert = chai.assert;
 const expect = chai.expect;
-const requester = supertest.agent('http://localhost:8080') //http://localhost:8080/api/cart
+const requester = supertest.agent('http://localhost:8080') //http://localhost:8080/api/carts
 
 let idCartTest
 let idProductTest
 let idUserTest
-//   /api/cart
 
 
 before(async () => {
@@ -40,8 +39,8 @@ before(async () => {
 describe('Testing Zapacool', () => {
     describe('Test de Cart', () => {
 
-        it('El endpoint POST /api/cart debe AGREGAR un producto al carrito', async () => {
-            const resAddProductInCartTest = await requester.post(`/api/cart/${idCartTest}/product/${idProductTest}`).send().expect(200);
+        it('El endpoint POST /api/carts debe AGREGAR un producto al carrito', async () => {
+            const resAddProductInCartTest = await requester.post(`/api/carts/${idCartTest}/product/${idProductTest}`).send().expect(200);
             expect(resAddProductInCartTest.body.status).to.equal("success");
         })
     })

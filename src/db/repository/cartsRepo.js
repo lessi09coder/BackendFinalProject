@@ -18,11 +18,15 @@ class CartRepository {
         return cart
     }
     getProductsInCartRepo = async (cid) => {
-        const user = await cartDAO.getProductsInCart(cid);
-        return user;
+        const cart = await cartDAO.getProductsInCart(cid);
+        return cart;
+    }
+    delteAllProductsInCartRepo = async (cid) => {
+        const cart = await cartDAO.delteAllProductsInCart(cid)
+        return cart
     }
 
-    
+
 }
 
 module.exports = CartRepository

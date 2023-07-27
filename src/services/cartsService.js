@@ -29,5 +29,9 @@ const productInCartService = async (cid) => {
     return getProductInCart
 }
 
+const deleteAllProductsCartService = async (cid) => {
+    let deleteCartProducts = await cartRepo.delteAllProductsInCartRepo(cid)
+    return deleteCartProducts
+}
 
-module.exports = { createCartService, getCartService, addProductCartService, productInCartService };
+module.exports = { createCartService, getCartService, addProductCartService, productInCartService, deleteAllProductsCartService };

@@ -4,17 +4,13 @@ const { pucharseStripe } = require('../config/stripe.js')
 const { v4: uuidv4 } = require("uuid");
 
 const purchaseProductsTicket = async (req, res) => {
-
     try {
-        const idCart = req.params.cid
-        //console.log(idCart)
-        const productsInsideCart = await productInCartService(idCart)
-        //console.log("el ARRAY que devuelve es:",productsInsideCart)
-        let ticket
+        const idCart = req.params.cid;        
+        const productsInsideCart = await productInCartService(idCart);        
+        let ticket;
         let productToTicket = [];
-        let totalPurchase = 0
-        let noExistStockTicket
-        //recorre los productos en el carrito y para cada uno:
+        let totalPurchase = 0;
+        let noExistStockTicket;        
         for (let productsCart of productsInsideCart) {
             let databaseProduct = await getProductByIdService(productsCart.product._id)
             if (productsCart.qt <= databaseProduct.stock) {
@@ -23,7 +19,6 @@ const purchaseProductsTicket = async (req, res) => {
                 //console.log(productsCart.product._id, updateStock)
                 await updateProductIdService(productsCart.product._id, updateStock)
                 totalPurchase += productsCart.qt * productsCart.product.price
-
             } else {
                 noExistStockTicket = productsCart.product.title
             }
@@ -54,7 +49,6 @@ const purchaseProductsTicket = async (req, res) => {
 const createSessionStripe = async (req, res) => {
     //en el body ponemos idcart
     const productsInsideCart = await productInCartService(idCart)
-
     const buyStripe = await pucharseStripe(amount, price)
 }
 

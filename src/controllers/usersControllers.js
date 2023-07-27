@@ -9,51 +9,28 @@ const getUser = async (req, res) => {
 };
 
 const postUserLogin = async (req, res) => {
-    try {
-        //console.log(req.body)
-        const username = (req.body.user);
+    try {        
+        const username = req.body.user;        
         const loginUser = await loginUserService(username);
-        //console.log("que trae el login user:" , loginUser)
-
-        const validatePass = yesValidPass(loginUser, req.body.password);
-
+        const validatePass = yesValidPass(loginUser, req.body.password);        
         if (validatePass) {
-            req.session.user = loginUser;
-
-            /* req.session.email = loginUser.email
-            req.session.rol = loginUser.rol;
-            req.session.idCart = loginUser.idCart */
+            req.session.user = loginUser;            
             res.send({ status: "success", data: req.session, payload: `el usuario ${req.session.user} esta loggeado.` });
         } else {
             res.send({ status: "error", payload: "no se pudo loggear el usuario." })
         }
-
     } catch {
-        res.status(500).send("hubo un error!")
+        res.status(500).send("hubo un error con el loggeo!")
     };
 };
-
-//testeo: para borrar
-/* const test = (req, res) => {
-    console.log("la session que llega:")
-    console.log(req.session)
-
-    res.render("loginAccess", {})
-}; */
 
 const getRegister = (req, res) => {
     res.render("register", {});
 };
 
 const getUserRegister = async (req, res) => {
-    //const { user, password } = req.body;
-    //console.log(req.body);
-    //console.log(user, password);
-
-    const newUserData = req.body;
-    //newUser = {user: "hola", password:11}
+    const newUserData = req.body;    
     const newUser = await createUserService(newUserData);
-
     res.send({ status: "success", data: newUser, payload: `el usuario ${req.session.user.user} esta loggeado.` })
 };
 
@@ -64,7 +41,6 @@ const getSessionLogout = async (req, res) => {
     })
 };
 
-//acomodar todo esto...
 const formForgotPassword = async (req, res) => {
     res.render("forgotPasswordHBS", { title: "Olvido su Password ?" })
 }
@@ -75,7 +51,6 @@ const forgotPassword = async (req, res, next) => {
         const expirationDate = new Date(Date.now() + 60 * 60 * 1000);
         const resetUrl = `${req.protocol}://${req.get('host')}/api/user/resetPassword`
         const tokenReset = await getTokenByUserIdService(user._id);
-
         if (tokenReset.error) {
             createTokenService(token, user._id, expirationDate);
         } else {
@@ -83,7 +58,6 @@ const forgotPassword = async (req, res, next) => {
             tokenReset.expirationDate = expirationDate;
             await updateTokenService(tokenReset);
         }
-
         sendMailToUser(token, user.email, resetUrl);
         const currentTime = new Date();
         const timeDifference = expirationDate - currentTime;
@@ -91,7 +65,6 @@ const forgotPassword = async (req, res, next) => {
             deleteTokenByIdService(tokenReset._id)
         }, timeDifference);
         res.status(201).send({ status: "success", payload: `El token de recuperacion ha sido enviado al email: ${user.email}` })
-
     } catch (error) {
         next(error)
     }
@@ -101,19 +74,16 @@ const formResetPassword = async (req, res) => {
 }
 const resetPassword = async (req, res, next) => {
     try {
-        const userEmail = await getUserEmailService(req.body.email)
-        console.log(userEmail)
+        const userEmail = await getUserEmailService(req.body.email)        
         const password = req.body.password
         const newPassword = req.body.repeatPassword
-        const tokenReset = await getTokenByUserIdService(userEmail._id);
-        console.log(tokenReset)
+        const tokenReset = await getTokenByUserIdService(userEmail._id);       
         const validToken = tokenReset.error ? null : isValidToken(tokenReset, req.body.token)
         if (!validToken) {
             res.status(403).send({ status: "error", payload: "Token Invalido" })
         }
         else {
-            const validPassword = yesValidPass(userEmail, password);
-            console.log(validPassword)
+            const validPassword = yesValidPass(userEmail, password);            
             if (validPassword) {
                 res.status(422).send({ status: "error", payload: "La contraseña no puede ser igual a la anterior" })
             }
@@ -130,14 +100,11 @@ const resetPassword = async (req, res, next) => {
         next(error)
     }
 }
-const deleteUser = async (req, res, next) => {
-    //usar uid en params del body
-    console.log("iniciando delete user:")
+const deleteUser = async (req, res, next) => {    
     try {
         const uid = req.params.uid
         const user = await getUserIdService(uid)
-        const deleteUser = await deleteUserService(uid)
-        console.log(user)
+        const deleteUser = await deleteUserService(uid)        
         if (deleteUser.error) {
             throw new Error("Usuario Inexistente")
         }
@@ -149,17 +116,12 @@ const deleteUser = async (req, res, next) => {
     }
 }
 
-
 const uploadForm = (req, res) => {
     const user = req.session.user;
     res.render('uploadDocs', { title: "Subir Docs", user });
 };
 
 const uploadDocuments = async (req, res, next) => {
-    /*  console.log("hola controller users uploadDoc")
-   console.log(req.params.uid) 
-   console.log(req.body) 
-    */
     try {        
         const uid = req.params.uid;
         const user = await getUserIdService(uid);        
@@ -175,7 +137,7 @@ const uploadDocuments = async (req, res, next) => {
             res.status(400).send({ status: "error", payload: "No se proporcionaron archivos" });
         }
     } catch (error) {
-        console.log(error)
+        next(error)
     }
 }
 

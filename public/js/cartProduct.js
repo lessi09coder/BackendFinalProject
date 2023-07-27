@@ -17,10 +17,19 @@ const addCartProduct = async (cid, pid) => {
 }
 
 
+const deleteProductCart = async () => {
+  console.log(window.location.href)
+  await fetch(`${window.location.href}`, {
+    method: "delete",
+    mode: "cors",
+    cache: "no-cache",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+    .then(response => response.text())
+    //.then(response => response.json())
+    .then(responseText => console.log(responseText))
+    .catch(error => console.error(error));
+}
 
-
-/* document.getElementById("agregarProducto").addEventListener("click", (event) => {
-    event.preventDefault();
-    console.log("escucha evento login")
-    addCartProduct();
-  }); */

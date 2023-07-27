@@ -1,4 +1,4 @@
-const { getCartService, createCartService, addProductCartService, productInCartService } = require("../services/cartsService.js");
+const { getCartService, createCartService, addProductCartService, productInCartService, deleteAllProductsCartService } = require("../services/cartsService.js");
 
 const getCarts = async (req, res) => {
     try {
@@ -42,10 +42,15 @@ const addProductCart = async (req, res) => {
 // este no va
 const productInCart = async (req, res) => {
     let proInCart = await productInCartService(req.params.cid)
+    console.log(proInCart)
     res.render('cartHBS', { title: "Carrito", proInCart })
 };
 
-
+const deleteAllProductsCart = async (req,res) =>{
+    const deleteProduct = await deleteAllProductsCartService(req.params.cid)
+    
+    res.status(200).send({status:"success", data: deleteProduct ,payload:`Carrito vaciado`})
+}
 // const addProductCart = async (req, res) => {
 /*   try {
     let addProduct = await addProductCartService(req.params.cid, req.params.pid);
@@ -62,4 +67,4 @@ const productInCart = async (req, res) => {
     });
   }
 }; */
-module.exports = { getCarts, createCart, addProductCart, productInCart };
+module.exports = { getCarts, createCart, addProductCart, productInCart, deleteAllProductsCart };

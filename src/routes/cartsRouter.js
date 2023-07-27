@@ -1,5 +1,5 @@
 const { Router } = require("express");
-const { getCarts, createCart, addProductCart, productInCart } = require("../controllers/cartsControllers.js");
+const { getCarts, createCart, addProductCart, productInCart , deleteAllProductsCart} = require("../controllers/cartsControllers.js");
 const {purchaseProductsTicket, createSessionStripe} = require('../controllers/tikectsControllers.js')
 const areYouAdmin = require('../midlewares/areYouAdmin.js')
 const areYouUser = require('../midlewares/areYouUser.js')
@@ -9,10 +9,9 @@ cartsRouter.get('/', areYouUser, getCarts);
 cartsRouter.post('/', createCart);
 //cartsRouter.post('/:cid/product/:pid', addProductCart) este es el de antes!
 cartsRouter.post('/:cid/product/:pid', addProductCart);
-
+cartsRouter.delete('/:cid', deleteAllProductsCart )
 
 cartsRouter.get('/:cid', areYouUser, productInCart);
-
 
 cartsRouter.get('/:cid/purchase' , purchaseProductsTicket)
 

@@ -12,7 +12,7 @@ const errorsRouter = require('./errorsRouter.js');
 
 routes.use("/api/users", userRouter)
 routes.use("/api/products", productsRouter)
-routes.use("/api/cart", cartsRouter)
+routes.use("/api/carts", cartsRouter)
 routes.use("/api/messages", messageRouter)
 routes.use('/api/mockingproducts', mockingproductsRouter)
 routes.use('/api/errors', errorsRouter)
